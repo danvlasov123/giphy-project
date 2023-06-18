@@ -1,0 +1,24 @@
+.giphy__card:hover .card__actions {
+  visibility: visible;
+  opacity: 1;
+}
+
+.card__actions {
+  visibility: hidden;
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
+  transition: all 0.2s linear;
+}
+
+.card__actions--button {
+  background: rgba(24, 24, 24, 0.775) !important;
+  border-radius: 6px !important;
+}
+
+.card__actions--button:hover {
+  opacity: 0.8;
+}
+.card__actions svg {
+  color: white;
+}
