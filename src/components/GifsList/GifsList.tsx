@@ -5,11 +5,15 @@ import { GET_GIPHY_URL, fetcher } from "../../api/api";
 import { Box, CircularProgress, ImageList } from "@mui/material";
 import { GifsCard } from "../GifsCard/GifsCard";
 
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 const GifsList = () => {
+  const isMobile = useMediaQuery("(max-width:440px)");
+
   const { isLoading, data } = useSWR(GET_GIPHY_URL, fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
-    revalidateOnReconnect: false, 
+    revalidateOnReconnect: false,
   });
 
   return (
@@ -19,7 +23,7 @@ const GifsList = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <ImageList cols={5}>
+        <ImageList cols={isMobile ? 1 : 5} gap={12} variant="quilted">
           {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data.map((item: any) => (
