@@ -37,7 +37,7 @@ const Search: FC = () => {
       spacing={1}
       onSubmit={handleSubmit}
     >
-      <Grid item xs={10}>
+      <Grid item xs={12} sm={10}>
         <OutlinedInput
           size="small"
           name="search"
@@ -45,7 +45,7 @@ const Search: FC = () => {
           placeholder="Search all gifs"
         />
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={12} sm={2}>
         <Button
           fullWidth
           sx={{ height: "100%" }}
