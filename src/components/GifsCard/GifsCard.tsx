@@ -2,7 +2,7 @@ import { FC, memo, useMemo } from "react";
 
 import { IconButton, ImageListItem, Stack, Box } from "@mui/material";
 
-import { FAVORITES_URL, fetcher } from "../../api/api";
+import { FAVORITES_URL } from "../../api/api";
 import { saveAs } from "file-saver";
 import DownloadIcon from "@mui/icons-material/Download";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
