@@ -1,26 +1,48 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import "./App.css";
-import { Search } from "./components/Search/Search";
-import { GifsList } from "./components/GifsList/GifsList";
-import { Box, Container, Grid, Typography } from "@mui/material";
+
+import {
+  HomePage,
+  SignInPage,
+  FavoritesPage,
+  ErrorPage,
+  SignUpPage,
+} from "./pages";
+
+import { Layout } from "./components/Layout/Layout";
+
+import { StoreProvider } from "./providers/StoreProvider";
+
+const pageWithLayout = (page: JSX.Element) => {
+  return <Layout>{page}</Layout>;
+};
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: pageWithLayout(<HomePage />),
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/sign-in",
+    element: <SignInPage />,
+  },
+  {
+    path: "/sign-up",
+    element: <SignUpPage />,
+  },
+  {
+    path: "/favorites",
+    element: pageWithLayout(<FavoritesPage />),
+  },
+]);
 
 function App() {
   return (
-    <Container>
-      <Grid container pt={4} pb={2} spacing={2} alignItems="center">
-        <Grid item xs={12}>
-          <Typography variant="h4" fontWeight={600} noWrap>
-            GIF Project
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Search />
-        </Grid>
-      </Grid>
-
-      <Box>
-        <GifsList />
-      </Box>
-    </Container>
+    <StoreProvider>
+      <RouterProvider router={router} />
+    </StoreProvider>
   );
 }
 

@@ -1,9 +1,12 @@
 import { FC, FormEvent } from "react";
-import { OutlinedInput, Button, Grid } from "@mui/material";
 
 import { useSWRConfig } from "swr";
 
 import { fetcher, GET_GIPHY_URL, GET_SEARCH_GIPHY_URL } from "../../api/api";
+
+import { TextField, Button, Grid } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+
 const Search: FC = () => {
   const { mutate: update } = useSWRConfig();
 
@@ -35,24 +38,28 @@ const Search: FC = () => {
       autoComplete="off"
       container
       spacing={1}
+      flexWrap="nowrap"
       onSubmit={handleSubmit}
+      alignItems="center"
     >
-      <Grid item xs={12} sm={10}>
-        <OutlinedInput
-          size="small"
+      <Grid item width="100%">
+        <TextField
           name="search"
           fullWidth
           placeholder="Search all gifs"
+          required
         />
       </Grid>
-      <Grid item xs={12} sm={2}>
+      <Grid item height="100%">
         <Button
+          size="large"
+          sx={{ p: 1.3 }}
+          variant="contained"
+          disableElevation
           fullWidth
-          sx={{ height: "100%" }}
           type="submit"
-          variant="outlined"
         >
-          Search
+          <SearchIcon htmlColor="white" fontSize="large" />
         </Button>
       </Grid>
     </Grid>

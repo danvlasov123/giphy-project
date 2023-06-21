@@ -1,19 +1,75 @@
-import { FC, memo } from "react";
+import { FC, memo, useMemo } from "react";
 
 import { IconButton, ImageListItem, Stack, Box } from "@mui/material";
 
-import DownloadIcon from "@mui/icons-material/Download";
-
+import { FAVORITES_URL, fetcher } from "../../api/api";
 import { saveAs } from "file-saver";
+import DownloadIcon from "@mui/icons-material/Download";
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
+import BookmarkRemoveIcon from "@mui/icons-material/BookmarkRemove";
 
 import "./style.css";
 
+type TypeGifsCardProps = {
+  item: any;
+};
+
+import { useStore } from "../../providers/StoreProvider";
+import axios from "axios";
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const GifsCard: FC<any> = memo(({ item }) => {
+export const GifsCard: FC<TypeGifsCardProps> = memo(({ item }) => {
+  const { favorites, user, setFavorites } = useStore();
+
+  const isFavorite = useMemo(
+    () => favorites.some((gif) => gif.id === item.id),
+    [favorites, item.id]
+  );
+
+  const favoritesIds = useMemo(
+    () => favorites.map((gif) => gif.id),
+    [favorites]
+  );
+
   const handleDownload = (name?: string, url?: string) => {
     if (url && name) {
       saveAs(url, name);
     }
+  };
+
+  const handleAddToFavorites = async () => {
+    setFavorites((items) => [...items, item]);
+
+    if (favorites.length) {
+      await axios(`${FAVORITES_URL}/${user?.id}`, {
+        method: "PUT",
+        data: {
+          id: user?.id,
+          favorites: [...favoritesIds, item?.id],
+        },
+      });
+    }
+
+    if (!favorites.length) {
+      await axios.post(`${FAVORITES_URL}`, {
+        favorites: [...favoritesIds, item?.id],
+        id: user?.id.toString(),
+      });
+    }
+  };
+
+  const handleRemoveFromFavorites = async () => {
+    const filterFavorites = favorites.filter((gif) => gif.id !== item.id);
+
+    setFavorites(filterFavorites);
+
+    await axios(`${FAVORITES_URL}/${user?.id}`, {
+      method: "PUT",
+      data: {
+        id: user?.id,
+        favorites: filterFavorites.map((gif) => gif.id),
+      },
+    });
   };
 
   return (
@@ -26,7 +82,13 @@ export const GifsCard: FC<any> = memo(({ item }) => {
         width="100%"
         loading="lazy"
       />
-      <Stack component={Box} className="card__actions" p={1}>
+      <Stack
+        component={Box}
+        className="card__actions"
+        p={1}
+        spacing={1}
+        direction="row"
+      >
         <IconButton
           className="card__actions--button"
           onClick={() =>
@@ -35,6 +97,25 @@ export const GifsCard: FC<any> = memo(({ item }) => {
         >
           <DownloadIcon />
         </IconButton>
+        {user?.id && (
+          <>
+            {!isFavorite ? (
+              <IconButton
+                className="card__actions--button"
+                onClick={handleAddToFavorites}
+              >
+                <BookmarkAddIcon />
+              </IconButton>
+            ) : (
+              <IconButton
+                className="card__actions--button"
+                onClick={handleRemoveFromFavorites}
+              >
+                <BookmarkRemoveIcon />
+              </IconButton>
+            )}
+          </>
+        )}
       </Stack>
     </ImageListItem>
   );

@@ -1,20 +1,16 @@
-import useSWR from "swr";
-
-import { GET_GIPHY_URL, fetcher } from "../../api/api";
-
+import { FC } from "react";
 import { Box, CircularProgress, ImageList } from "@mui/material";
 import { GifsCard } from "../GifsCard/GifsCard";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-const GifsList = () => {
-  const isMobile = useMediaQuery("(max-width:440px)");
+type GifsListType = {
+  data: any[];
+  isLoading?: boolean;
+};
 
-  const { isLoading, data } = useSWR(GET_GIPHY_URL, fetcher, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+const GifsList: FC<GifsListType> = ({ data, isLoading = false }) => {
+  const isMobile = useMediaQuery("(max-width:440px)");
 
   return (
     <Box>
