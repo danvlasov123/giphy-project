@@ -5,7 +5,7 @@ const api_key = "G0RsOXyOU37gwV2J1TAe7lDz9DLOKEh9";
 
 export const api_url = "https://api.giphy.com/v1/gifs";
 
-const location_url = "http://localhost:3000";
+const location_url = "https://json-server-vercel-jet.vercel.app";
 
 export const fetcher = async (url: string, config?: AxiosRequestConfig) => {
   return await axios(url, {
